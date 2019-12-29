@@ -5,27 +5,20 @@ class Todo extends React.Component {
     
         this.state = {
              data:'',
-             list:[{task:'Abcd task',
+             list:[
+                 {
+                 task:'Remove this Task And add yours',
              Date:new Date().toString().slice(15,25),
-             ischecked:false},
-             {task:'1234 task',
-            Date:new Date().toString().slice(15,25),
-            ischecked:false
-            },
-            {task:'xyzq task',
-            Date:new Date().toString().slice(15,25),
-            ischecked:false
-            },
-            {task:'5432 task',
-            Date:new Date().toString().slice(15,25),
-            ischecked:false
-            }
-            ],
-             name:'User',
+             ischecked:false
+             },
+             ],
+             name:'',
+           
              enpos:true,
              posval:'',
             en:true,
              choice:true,
+             
         }
         this.addatfirst=this.addatfirst.bind(this)
     }
@@ -188,43 +181,14 @@ else {posval==''?(this.state.data==''?alert("Task box can't be empty"):alert("Po
 (this.state.data==''?alert("Task box can't be empty"):alert(`Number should be between 1 and ${this.state.list.length+1}`))}
 }
     render() {
-        const bordercheck={
-            border:'1px red solid'
-        }
-        const prime={
-            color:'red'
-        }
+      
+        
         const form={
             marginLeft:'30%'
         }
-        const inputcss={
-            
-            borderRadius:'20px',
-            border:'1px green solid',
-            padding:'20px',
-            height:'80px',
-            minWidth:'300px',
-            margin:'auto',
-            marginTop:'20px',
-            marginBottom:'20px',
-           
-
-         
-        }
-        const Taskscss={
-            border:'1px blue solid',
-            margin:'5px'
-        }
-        const removecss={
-
-        }
-        const Listcss={
-            border:'2px green solid',
-            margin:'10px 0px',
-            padding:'15px',
-            fontSize:'15px',
-            textTransform:'capitalize'
-        }
+        
+       
+       
         const addbtncss={
             margin:'3px',
             
@@ -232,51 +196,69 @@ else {posval==''?(this.state.data==''?alert("Task box can't be empty"):alert("Po
 
         return (
             this.state.en?(
-            <div className='jumbotron text-center'>
+            <div className='Landingname text-center'>
                 
                 <form >
-                    <input  onChange={this.name}></input>
-                    <button style={prime} onClick={this.en}>Submit</button>
+                    <input type='text'value={this.state.name} onChange={this.name} placeholder="Enter your Name"></input>
+             
+                    {this.state.name.length>0?
+                    <button onClick={this.en}><i class=" animated shake delay-300s fa fa-angle-double-right"></i></button>
+                    :''}
                 </form>
             </div>
         ):
         
         (<div>
-            <h1  className="animated infinite rubberBand delay-300s ">Hey {this.state.name}</h1>
+            <h1  className="animated  bounceInRight delay-300s Name">Hey {this.state.name}</h1>
         <div>
-                <form>
+                <form onSubmit={this.addlast}>
                     <div style={{margin:'auto',width:'350px'}}>
-                    <input placeholder='Put Your task here..' style={inputcss} className='text-center' value={this.state.data}onChange={this.handleinput}>
+                    <input type='text' placeholder='Put Your task here..'  className='taskinput text-center' value={this.state.data}onChange={this.handleinput}>
                     </input>
-                    <button className="ml-3" onClick={this.state.choice?this.start:this.stop}>{this.state.choice?
+                    <button type='button' className="ml-3" onClick={this.state.choice?this.start:this.stop}>{this.state.choice?
                     (<i style={{fontSize:'25px'}} class="fa fa-microphone" aria-hidden="true"></i>):
-                    (<i style={{fontSize:'20px'}} class='fas fa-pause aria-hidden="true"'></i>)}
+                    (<i style={{fontSize:'20px'}} class='fa fa-pause aria-hidden="true"'></i>)}
               
                 </button>
                 </div>
                     <div>
-                <p>{this.state.noteContents}</p>
+                
             </div>
-                    <div style={bordercheck} className='text-center'>
-                    <button style={addbtncss} className="btn btn-primary" type='submit' onClick={this.addatend}> Add At last</button>
-                    <button  style={addbtncss} className="btn btn-primary" type='submit' onClick={this.addatfirst}> Add at first</button>
+            {
+                this.state.data.length>0
+                ?
+                    <div className='text-center' >
+                    <button  style={addbtncss} className="btn btn-primary" type='submit' onClick={this.addatend}> Add At last</button>
+                    <button   style={addbtncss} className="btn btn-primary" type='submit' onClick={this.addatfirst}> Add at first</button>
                     {this.state.enpos?<button  style={addbtncss}  className="btn btn-primary" type='submit'
-                     onClick={this.switchbtn}> Add at position</button>:(
-                     <span><input value={this.state.posval} onChange={this.pos}></input><button onClick={this.addpos}>Add</button></span>)}
+                     onClick={this.switchbtn}> Add at position</button>
+                     :(<span><form onSubmit={this.addpos}><input className="addinput" type='number' value={this.state.posval} onChange={this.pos}></input>
+                     <button type='button' className="btn btn-primary" onClick={this.addpos}>+</button>
+                     </form></span>)}
                      
                     </div>
+                :''
+            }        
                 </form>
-                <div style={Taskscss}>  
+                <div className='Taskscss'>  
                 {
                     this.state.list.map((list,index)=>
-                    <div style={Listcss}>
-                    <span>{index+1}. </span>
-                    <span key={index} 
+                    <div className='Listcss'>
+                    <div className='taskfront'>    
+                    <div className='indexnum'> {index+1}. </div>
+                     <div className='indexdate'> {list.Date}</div>
+                    </div>
+                    <div className='taskinfo' key={index} 
                     style={(list.ischecked)?{textDecorationLine:'line-through'}:{textDecorationLine:'none'}}
-                    >{list.task}{list.Date}</span>
+                    >{list.task}</div>
                     
-                    <button onClick={()=>this.check(index)} >{list.ischecked?<i style={{fontSize:'20px'}} class="fa fa-times-circle" aria-hidden="true"></i>:<i style={{fontSize:'20px'}} class="fa fa-check" aria-hidden="true"></i>}</button>
+                    <div className="rembtn">
+                    <button className="btn btn-warning " onClick={()=>this.check(index)} >{list.ischecked?<i style={{fontSize:'20px'}} 
+                    class="fa fa-times-circle" aria-hidden="true"></i>:<i style={{fontSize:'20px'}} 
+                    class="fa fa-check" aria-hidden="true"></i>}</button>
+
                     <button  className="btn btn-danger " onClick={()=>this.remove(index)} ><i style={{fontSize:'20px'}} class="fa fa-trash" aria-hidden="true"></i></button>
+                    </div>
                     </div>
                     )
                 }
