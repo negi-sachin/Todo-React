@@ -181,20 +181,7 @@ else {posval==''?(this.state.data==''?alert("Task box can't be empty"):alert("Po
 (this.state.data==''?alert("Task box can't be empty"):alert(`Number should be between 1 and ${this.state.list.length+1}`))}
 }
     render() {
-      
-        
-        const form={
-            marginLeft:'30%'
-        }
-        
-       
-       
-        const addbtncss={
-            margin:'3px',
-            
-        }
-
-        return (
+       return (
             this.state.en?(
             <div className='Landingname text-center'>
                 
@@ -215,7 +202,7 @@ else {posval==''?(this.state.data==''?alert("Task box can't be empty"):alert("Po
                     <div style={{margin:'auto',width:'350px'}}>
                     <input type='text' placeholder='Put Your task here..'  className='taskinput text-center' value={this.state.data}onChange={this.handleinput}>
                     </input>
-                    <button type='button' className="ml-3" onClick={this.state.choice?this.start:this.stop}>{this.state.choice?
+                    <button type='button' className="ml-2" onClick={this.state.choice?this.start:this.stop}>{this.state.choice?
                     (<i style={{fontSize:'25px'}} class="fa fa-microphone" aria-hidden="true"></i>):
                     (<i style={{fontSize:'20px'}} class='fa fa-pause aria-hidden="true"'></i>)}
               
@@ -225,19 +212,19 @@ else {posval==''?(this.state.data==''?alert("Task box can't be empty"):alert("Po
                 
             </div>
             {
-                this.state.data.length>0
-                ?
-                    <div className='text-center' >
-                    <button  style={addbtncss} className="btn btn-primary" type='submit' onClick={this.addatend}> Add At last</button>
-                    <button   style={addbtncss} className="btn btn-primary" type='submit' onClick={this.addatfirst}> Add at first</button>
-                    {this.state.enpos?<button  style={addbtncss}  className="btn btn-primary" type='submit'
+                // this.state.data.length>0
+                // ?
+                    <div className='btncls text-center' >
+                    <button   className="btn btn-primary" type='submit' onClick={this.addatend}> Add At last</button>
+                    <button    className="btn btn-primary" type='submit' onClick={this.addatfirst}> Add at first</button>
+                    {this.state.enpos?<button   className="btn btn-primary" type='submit'
                      onClick={this.switchbtn}> Add at position</button>
                      :(<span><form onSubmit={this.addpos}><input className="addinput" type='number' value={this.state.posval} onChange={this.pos}></input>
                      <button type='button' className="btn btn-primary" onClick={this.addpos}>+</button>
                      </form></span>)}
                      
                     </div>
-                :''
+                // :''
             }        
                 </form>
                 <div className='Taskscss'>  
