@@ -5,11 +5,26 @@ class Todo extends React.Component {
     
         this.state = {
              data:'',
-             list:['going home','goinf to work','play football','play vdo game','have lunch'],
+             list:[{task:'Abcd task',
+             Date:new Date().toString().slice(15,25),
+             ischecked:false},
+             {task:'1234 task',
+            Date:new Date().toString().slice(15,25),
+            ischecked:false
+            },
+            {task:'xyzq task',
+            Date:new Date().toString().slice(15,25),
+            ischecked:false
+            },
+            {task:'5432 task',
+            Date:new Date().toString().slice(15,25),
+            ischecked:false
+            }
+            ],
              name:'User',
-             en:true,
-             ischecked:false,
-            
+             enpos:true,
+             posval:'',
+            en:true,
              choice:true,
         }
         this.addatfirst=this.addatfirst.bind(this)
@@ -20,15 +35,16 @@ class Todo extends React.Component {
             name:e.target.value
         })
     }
-        en=(e)=>{
-            e.preventDefault();
-            this.setState({
-                en:false
-            })
-        }
+     
+    en=(e)=>{
+        e.preventDefault();
+        this.setState({
+            en:false
+        })
+    }
 
-    
-    handleinput=(e)=>{
+
+handleinput=(e)=>{
       this.setState({
           data:e.target.value
       })
@@ -37,7 +53,8 @@ class Todo extends React.Component {
       if(this.state.data!='')
       this.setState(prevstate=>({
           data:'',
-          list:[...this.state.list,prevstate.data]
+          enpos:true,
+          list:[...this.state.list,{task:prevstate.data,Date:new Date().toString().slice(15,25),ischecked:false}]
       }))
       else alert("Can't be Blank")
       e.preventDefault();
@@ -48,7 +65,8 @@ class Todo extends React.Component {
     if(this.state.data!='')
 this.setState(prevstate=>({
     data:'',
-    list:[prevstate.data].concat(prevstate.list)
+    enpos:true,
+    list:[{task:prevstate.data,Date:new Date().toString().slice(15,25),ischecked:false}].concat(prevstate.list)
 }))
 else alert("Can't be Blank")
 e.preventDefault();
@@ -65,9 +83,13 @@ e.preventDefault();
    }
 
    check=(e)=>{
-this.setState({
-    ischecked:true
-})
+      
+      {this.state.list[e].ischecked?this.state.list[e].ischecked=false:this.state.list[e].ischecked=true}
+    // this.state.list[e].ischecked=true
+    this.setState({
+      
+    })
+
 
    }
 
@@ -143,6 +165,28 @@ stop=(e)=>{
         
       }
 }
+pos=(e)=>{
+    this.setState({posval:e.target.value})
+}
+switchbtn=(e)=>{
+    this.setState({
+        enpos:false
+    })
+    e.preventDefault()
+}
+addpos=(e)=>{
+    e.preventDefault();
+    let posval=this.state.posval
+  if(posval!=''&&posval<=this.state.list.length+1&&posval>0&&this.state.data!='')
+this.setState(prevstate=>({
+    data:'',
+    posval:'',
+    enpos:true,
+    list:(prevstate.list.slice(0,prevstate.posval-1)||{}).concat({task:prevstate.data,Date:new Date().toString().slice(15,25),ischecked:false},prevstate.list.slice(prevstate.posval-1,prevstate.list.length+1))
+}))
+else {posval==''?(this.state.data==''?alert("Task box can't be empty"):alert("Position value can't be empty")):
+(this.state.data==''?alert("Task box can't be empty"):alert(`Number should be between 1 and ${this.state.list.length+1}`))}
+}
     render() {
         const bordercheck={
             border:'1px red solid'
@@ -169,19 +213,21 @@ stop=(e)=>{
         }
         const Taskscss={
             border:'1px blue solid',
-            margin:'50px'
+            margin:'5px'
         }
         const removecss={
 
         }
         const Listcss={
             border:'2px green solid',
-            margin:'20px',
+            margin:'10px 0px',
             padding:'15px',
-            fontSize:'20px'
+            fontSize:'15px',
+            textTransform:'capitalize'
         }
         const addbtncss={
-            margin:'10px'
+            margin:'3px',
+            
         }
 
         return (
@@ -196,7 +242,7 @@ stop=(e)=>{
         ):
         
         (<div>
-            {/* <h1  className="animated infinite rubberBand delay-300s ">Hey {this.state.name}</h1> */}
+            <h1  className="animated infinite rubberBand delay-300s ">Hey {this.state.name}</h1>
         <div>
                 <form>
                     <div style={{margin:'auto',width:'350px'}}>
@@ -214,7 +260,10 @@ stop=(e)=>{
                     <div style={bordercheck} className='text-center'>
                     <button style={addbtncss} className="btn btn-primary" type='submit' onClick={this.addatend}> Add At last</button>
                     <button  style={addbtncss} className="btn btn-primary" type='submit' onClick={this.addatfirst}> Add at first</button>
-                    <button  style={addbtncss}  className="btn btn-primary" type='submit' onClick={this.handlesubmit}> Add at position</button> 
+                    {this.state.enpos?<button  style={addbtncss}  className="btn btn-primary" type='submit'
+                     onClick={this.switchbtn}> Add at position</button>:(
+                     <span><input value={this.state.posval} onChange={this.pos}></input><button onClick={this.addpos}>Add</button></span>)}
+                     
                     </div>
                 </form>
                 <div style={Taskscss}>  
@@ -223,11 +272,11 @@ stop=(e)=>{
                     <div style={Listcss}>
                     <span>{index+1}. </span>
                     <span key={index} 
-                    //style={(this.state.ischecked)?{textDecorationLine:'line-through'}:{textDecorationLine:'none'}}
-                    >{list}</span>
+                    style={(list.ischecked)?{textDecorationLine:'line-through'}:{textDecorationLine:'none'}}
+                    >{list.task}{list.Date}</span>
                     
-                    {/* <button onClick={()=>this.check(index)} >Check</button> */}
-                    <button  className="btn btn-danger float-right" onClick={()=>this.remove(index)} >Remove</button>
+                    <button onClick={()=>this.check(index)} >{list.ischecked?<i style={{fontSize:'20px'}} class="fa fa-times-circle" aria-hidden="true"></i>:<i style={{fontSize:'20px'}} class="fa fa-check" aria-hidden="true"></i>}</button>
+                    <button  className="btn btn-danger " onClick={()=>this.remove(index)} ><i style={{fontSize:'20px'}} class="fa fa-trash" aria-hidden="true"></i></button>
                     </div>
                     )
                 }
